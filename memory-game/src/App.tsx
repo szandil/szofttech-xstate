@@ -29,13 +29,18 @@ const App = () => {
   // const { count } = state.context;
 
   const waiting = 
-    <div>
+    <>
       <h1>Játék indítása</h1>
-      <button onClick={() => send("START GAME")}>START GAME</button>
-    </div>;
+      <button 
+        type = 'button'
+        className='btn btn-primary'
+        onClick={() => send("START GAME")}>
+          START GAME
+          </button>
+    </>;
 
   return (
-    <div>
+    <div className="container-fluid pt-4 main">
       {state.matches("waiting for game") && waiting }
       {state.matches("game in progress") && <h1>Játék folyamatban</h1>}
     </div>
