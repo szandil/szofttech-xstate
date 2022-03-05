@@ -20,7 +20,6 @@ MEMÓRIA JÁTÉK
 - kezelni kell azt is, hogy hány db van felfordítva, melyik játékosnál, melyik kártyák vannak --> ezt tudja egy állapotgép?
 
 - context megadása teljesen kívülről? talán createModel vagy withContext vagy react context 
-
 */
 // TODO átírni typescriptre --> típusos fsm
 
