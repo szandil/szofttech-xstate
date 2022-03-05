@@ -1,8 +1,12 @@
 import { createMachine } from "xstate";
 
 
-export const cardMachine = createMachine({
+export const createCardMachine = ({name}: {name: string}) => createMachine({
+    tsTypes: {} as import("./cardMachine.typegen").Typegen0,
     id: 'card',
+    context: {
+        name
+    },
     initial: 'in game',
     states: {
         'in game': {

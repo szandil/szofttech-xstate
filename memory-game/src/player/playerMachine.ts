@@ -1,6 +1,7 @@
 import { createMachine } from "xstate";
 
-const playerMachine = createMachine({
+export const playerMachine = createMachine({
+    tsTypes: {} as import("./playerMachine.typegen").Typegen0,
     initial: "waiting",
     context: {
         collectedPairs: []
