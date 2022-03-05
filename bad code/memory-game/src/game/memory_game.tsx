@@ -20,7 +20,6 @@ export const gameMachine = createMachine({
             target: "#Memory game.game in progress",
           },
           {
-            cond: "invalidPlayerNumber",
             target: "#Memory game.invalid player number",
           }
         ],
@@ -59,8 +58,7 @@ export const gameMachine = createMachine({
 },
 {
   guards: {
-    validPlayerNumber: (context, event) => context.numberOfPlayers >= 2,
-    invalidPlayerNumber: context => !context.validPlayerNumber
+    validPlayerNumber: (context, event) => context.numberOfPlayers >= 2
   },
   delays: {
     DEFAULT_DELAY

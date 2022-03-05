@@ -44,7 +44,7 @@ MEMÓRIA JÁTÉK
 //   }
 // });
 
-function App() {
+export const App = () => {
   const [state, send] = useMachine(gameMachine);      // useInterprettel jobb?
   // const active = state.matches("active");
   // const { count } = state.context;
@@ -63,5 +63,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
