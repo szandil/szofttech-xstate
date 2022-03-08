@@ -1,17 +1,13 @@
 import { createMachine } from "xstate";
+import { CardContext, CardEvent, CardTypestate } from "./cardTypes";
 
-export interface CardContext {
-    frontImage?: string,
-    backImage?: string,
-    name?: string
-}
 
-export const createCardMachine = ({name}: {name: string}) => createMachine({
-    tsTypes: {} as import("./cardMachine.typegen").Typegen0,
+
+export const createCardMachine = ({name}: {name: string}) => createMachine<CardContext, CardEvent, CardTypestate>({
     id: 'card',
     context: {
         name
-    } as CardContext,
+    },
     initial: 'in game',
     states: {
         'in game': {
