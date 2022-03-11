@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { useMachine } from "@xstate/react";
 import { gameMachine } from './game/gameMachine';
@@ -21,12 +21,20 @@ MEMÓRIA JÁTÉK
 - context megadása teljesen kívülről? talán createModel vagy withContext vagy react context 
 */
 
-// TODO storybook? 
 
 const App = () => {
+  // const gameService = useInterpret(gameMachine);
+  // const { state, send } = gameService; 
   const [state, send] = useMachine(gameMachine);      // useInterprettel jobb?
   // const active = state.matches("active");
   // const { count } = state.context;
+
+  const { cards } = state.context;
+  useEffect(() => {
+    console.log('cards changed: ', cards);
+    
+  }, [cards])
+  
 
   const waiting = 
     <>
@@ -38,9 +46,10 @@ const App = () => {
           START GAME
           </button>
     </>;
+    
 
   return (
-    <div className="container-fluid pt-4 main">
+    <div className="container-fluid pt-4 main"> 
       {state.matches("waiting for game") && waiting }
       {state.matches("game in progress") && <h1>Játék folyamatban</h1>}
     </div>

@@ -3,10 +3,10 @@ import { CardContext, CardEvent, CardTypestate } from "./cardTypes";
 
 
 
-export const createCardMachine = ({name}: {name: string}) => createMachine<CardContext, CardEvent, CardTypestate>({
+export const createCardMachine = ({id}: {id: string}) => createMachine<CardContext, CardEvent, CardTypestate>({
     id: 'card',
     context: {
-        name
+        id
     },
     initial: 'in game',
     states: {
@@ -30,4 +30,10 @@ export const createCardMachine = ({name}: {name: string}) => createMachine<CardC
             type: "final"
         }
     }
+}, 
+{
+    actions: {},
+    guards: {},
+    delays: {},
+    services: {}
 });

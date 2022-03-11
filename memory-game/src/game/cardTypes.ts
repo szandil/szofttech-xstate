@@ -3,7 +3,7 @@ import { ActorRef } from "xstate";
 export interface CardContext {
     frontImage?: string,
     backImage?: string,
-    name?: string
+    id: string
 }
 
 export type CardEvent = 
@@ -17,4 +17,4 @@ export type CardTypestate = {
             'collected' 
 }
 
-export type CardActorType = ActorRef<CardEvent, CardTypestate>;
+export type CardActorRefType = ActorRef<CardEvent, CardTypestate>;
