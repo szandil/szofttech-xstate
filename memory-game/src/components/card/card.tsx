@@ -15,7 +15,7 @@ export const Card = ({cardActor, ...props}: CardProps) => {
 
     return (
         <span className={styles.card}>
-            THIS IS A CARD
+            THIS IS A CARD - id: {id}
         </span>
     );
 };

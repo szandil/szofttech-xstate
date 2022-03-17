@@ -5,6 +5,7 @@ import { CardActorRefType, CardContext, CardEvent, CardTypestate } from "./cardT
 
 export interface GameContext {
     numberOfPlayers: number;
+    numberOfCards: number;
     cards: CardActorRefType[];
     players: PlayerActorType[];
     firstFlippedCard?: CardActorRefType;

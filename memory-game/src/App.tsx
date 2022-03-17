@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import './App.css';
 import { useMachine } from "@xstate/react";
 import { gameMachine } from './game/gameMachine';
+import { Card } from './components/card/card';
 
 /* 
 
@@ -46,12 +47,19 @@ const App = () => {
           START GAME
           </button>
     </>;
+
+
+  const inProgress = 
+    <>
+      <h1>Játék folyamatban</h1>
+      {cards.map(card => <Card key={card.id} cardActor={card} />)}
+    </>
     
 
   return (
     <div className="container-fluid pt-4 main"> 
       {state.matches("waiting for game") && waiting }
-      {state.matches("game in progress") && <h1>Játék folyamatban</h1>}
+      {state.matches("game in progress") && inProgress}
     </div>
   );
 }
