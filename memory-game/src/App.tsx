@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './App.css';
-import { useMachine } from "@xstate/react";
+import { useActor, useInterpret, useMachine, useSelector } from "@xstate/react";
 import { gameMachine } from './game/gameMachine';
 import { Card } from './components/card/card';
+import { GlobalGameContext } from './gameContext';
+import { ActorRefFrom, InterpreterFrom } from 'xstate';
+import { CardActorRefType } from './game/cardTypes';
 
 /* 
 
@@ -22,20 +25,21 @@ MEMÓRIA JÁTÉK
 - context megadása teljesen kívülről? talán createModel vagy withContext vagy react context 
 */
 
+const selectCards = (state: any): CardActorRefType[] => state.context.cards;
+
+const waitingForGameSelector = (state: any) => state.matches("waiting for game");
+const gameInProgressSelector = (state: any) => state.matches("game in progress");
 
 const App = () => {
-  // const gameService = useInterpret(gameMachine);
-  // const { state, send } = gameService; 
-  const [state, send] = useMachine(gameMachine);      // useInterprettel jobb?
-  // const active = state.matches("active");
-  // const { count } = state.context;
 
-  const { cards } = state.context;
-  useEffect(() => {
-    console.log('cards changed: ', cards);
-    
-  }, [cards])
-  
+  const ctx = useContext(GlobalGameContext);
+  const gameService = ctx.gameService;
+  const { send } = gameService; 
+
+  const cards = useSelector(gameService, selectCards);
+
+  const isWaitingForGame = useSelector(gameService, waitingForGameSelector);
+  const isGameInProgress = useSelector(gameService, gameInProgressSelector);
 
   const waiting = 
     <>
@@ -58,8 +62,8 @@ const App = () => {
 
   return (
     <div className="container-fluid pt-4 main"> 
-      {state.matches("waiting for game") && waiting }
-      {state.matches("game in progress") && inProgress}
+      {isWaitingForGame && waiting }
+      {isGameInProgress && inProgress}
     </div>
   );
 }

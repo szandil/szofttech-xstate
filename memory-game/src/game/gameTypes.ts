@@ -3,7 +3,7 @@ import { PlayerActorType } from "../player/playerTypes";
 import { CardActorRefType, CardContext, CardEvent, CardTypestate } from "./cardTypes";
 
 
-export interface GameContext {
+export interface GameContextType {
     numberOfPlayers: number;
     numberOfCards: number;
     cards: CardActorRefType[];
@@ -24,7 +24,7 @@ export type GameEvent =
     | flipCardEvent;
 
 export type GameTypestate = {
-    context: GameContext;
+    context: GameContextType;
     value: 'waiting for game' |
             'game in progress' | {'game in progress': 'one card flipped'} | {'game in progress': 'two cards flipped'} | {'game in progress': 'no cards fipped'} |
             'game over'
