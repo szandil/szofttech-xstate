@@ -1,4 +1,4 @@
-import { createMachine } from "xstate";
+import { assign, createMachine } from "xstate";
 import { CardContext, CardEvent, CardTypestate } from "./cardTypes";
 
 
@@ -6,7 +6,8 @@ import { CardContext, CardEvent, CardTypestate } from "./cardTypes";
 export const createCardMachine = ({id}: {id: string}) => createMachine<CardContext, CardEvent, CardTypestate>({
     id: 'card',
     context: {
-        id
+        id,
+        visibleImage: 'back is visible'
     },
     initial: 'in game',
     states: {
@@ -15,12 +16,18 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
             states: {
                 'face down': {
                     on: {
-                        TURN: 'face up'
+                        TURN: {
+                            target: 'face up',
+                            actions: 'changeImageToFront'
+                        }
                     }
                 },
                 'face up': {
                     on: {
-                        TURN: 'face down',
+                        TURN: {
+                            target: 'face down',
+                            actions: 'changeImageToBack'
+                        },
                         COLLECT: '#card.collected'
                     }
                 }
@@ -32,7 +39,14 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
     }
 }, 
 {
-    actions: {},
+    actions: {
+        changeImageToFront: assign({
+            visibleImage: (context, event) => 'front is visible'
+        }),
+        changeImageToBack: assign({
+            visibleImage: (context) => 'back is visible'
+        })
+    },
     guards: {},
     delays: {},
     services: {}

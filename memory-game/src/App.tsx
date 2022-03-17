@@ -56,7 +56,9 @@ const App = () => {
   const inProgress = 
     <>
       <h1>Játék folyamatban</h1>
-      {cards.map(card => <Card key={card.id} cardActor={card} />)}
+      <div className='cards'>
+        {cards.map(card => <Card key={card.id} cardActor={card} />)}
+      </div>
     </>
     
 

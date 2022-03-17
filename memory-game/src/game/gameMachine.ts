@@ -2,10 +2,10 @@ import { assign, createMachine, spawn } from "xstate";
 import { playerMachine } from "../player/playerMachine";
 import { createCardMachine } from "./cardMachine";
 import { CardActorRefType } from "./cardTypes";
-import { GameContextType, GameEvent, GameTypestate } from "./gameTypes";
+import { GameContext, GameEvent, GameTypestate } from "./gameTypes";
 
 
-export const gameMachine = createMachine<GameContextType, GameEvent, GameTypestate>({
+export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>({
   id: "Memory game",
   context: {
     numberOfPlayers: 1,
@@ -58,26 +58,6 @@ export const gameMachine = createMachine<GameContextType, GameEvent, GameTypesta
 },
   {
     actions: {
-      // initGame: (context, event) => {
-      //   console.log('init');
-
-      //   let newCards = [];
-      //   const { cards } = context;
-      //   const { numberOfCards } = context;
-      //   for (let i = 0; i < numberOfCards / 2; i++) {
-      //     const newCard1 = createCardMachine({id: i.toString() + "-1"});
-      //     const newCard2 = createCardMachine({id: i.toString() + "-2"});
-      //     newCards.push(newCard1);
-      //     newCards.push(newCard2);
-      //   }
-      //   assign<GameContextType, any>({
-      //     cards: (context, event) => [
-      //       ...cards,
-      //       spawn(createCardMachine({id: 'newCard1'})) as CardActorRefType
-      //     ]
-      //   });
-      //   console.log('newcards', newCards);
-      //   console.log(context);
 
       initGame: assign({
         cards: (context, _) => {

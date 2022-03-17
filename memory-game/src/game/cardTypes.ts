@@ -3,6 +3,7 @@ import { ActorRef } from "xstate";
 export interface CardContext {
     frontImage?: string,
     backImage?: string,
+    visibleImage?: string,
     id: string
 }
 
