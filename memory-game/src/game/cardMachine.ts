@@ -7,7 +7,6 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
     id: 'card',
     context: {
         id,
-        visibleImage: 'back is visible'
     },
     initial: 'in game',
     states: {
@@ -39,14 +38,7 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
     }
 }, 
 {
-    actions: {
-        changeImageToFront: assign({
-            visibleImage: (context, event) => 'front is visible'
-        }),
-        changeImageToBack: assign({
-            visibleImage: (context) => 'back is visible'
-        })
-    },
+    actions: {},
     guards: {},
     delays: {},
     services: {}
