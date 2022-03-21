@@ -1,4 +1,5 @@
 import { assign, createMachine, spawn } from "xstate";
+import {  respond } from "xstate/lib/actions";
 import { playerMachine } from "../player/playerMachine";
 import { createCardMachine } from "./cardMachine";
 import { CardActorRefType } from "./cardTypes";
@@ -33,21 +34,23 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
       states: {
         "one card flipped": {
           on: {
-            "FLIP CARD": {
+            FLIP: {
               target: "two cards flipped",
+              actions: 'respondFlip'
             },
           },
         },
         "two cards flipped": {
-          always: [
-            { target: '#Memory game.game over', cond: 'allCardsCollected' },
-            { target: 'no cards flipped' }
-          ]
+          // always: [
+          //   { target: '#Memory game.game over', cond: 'allCardsCollected' },
+          //   { target: 'no cards flipped' }
+          // ]
         },
         "no cards flipped": {
           on: {
-            "FLIP CARD": {
-              target: "one card flipped"
+            FLIP: {
+              target: "one card flipped",
+              actions: 'respondFlip'
             },
           },
         },
@@ -75,7 +78,8 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
             ...newCards.map(card => spawn(card) as CardActorRefType)
             ];
         }
-      })
+      }),
+      respondFlip: respond('FLIP')
     },
     guards: {
       allCardsCollected: (context, event) => {

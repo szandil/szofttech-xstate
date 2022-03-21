@@ -6,8 +6,21 @@ export interface CardContext {
     id: string
 }
 
+export interface FlipEvent  {
+    type: 'FLIP'
+}
+
+export interface TryFlippingEvent {
+    type: 'TRY_FLIPPING'
+}
+
+export interface CollectEvent {
+    type: 'COLLECT'
+}
+
 export type CardEvent = 
-    | { type: 'TURN' }
+    | FlipEvent
+    | TryFlippingEvent
     | { type: 'COLLECT' };
 
 

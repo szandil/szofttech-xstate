@@ -1,4 +1,5 @@
-import { assign, createMachine } from "xstate";
+import { createMachine } from "xstate";
+import { sendParent } from "xstate/lib/actions";
 import { CardContext, CardEvent, CardTypestate } from "./cardTypes";
 
 
@@ -15,21 +16,27 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
             states: {
                 'face down': {
                     on: {
-                        TURN: {
+                        FLIP: {
                             target: 'face up',
-                            actions: 'changeImageToFront'
+                            // actions: [
+                            //     'turnAction', 
+                            //     sendParent('FLIP')
+                            // ]
+                        },
+                        TRY_FLIPPING: {
+                            actions: sendParent('FLIP')
                         }
                     }
                 },
                 'face up': {
                     on: {
-                        TURN: {
+                        FLIP: {
                             target: 'face down',
-                            actions: 'changeImageToBack'
+                            // actions: 'turnAction'
                         },
                         COLLECT: '#card.collected'
                     }
-                }
+                },
             },
         }, 
         'collected': {
@@ -38,7 +45,8 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
     }
 }, 
 {
-    actions: {},
+    actions: {
+    },
     guards: {},
     delays: {},
     services: {}

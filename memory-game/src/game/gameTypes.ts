@@ -16,7 +16,7 @@ export interface startGameEvent {
 };
 
 export interface flipCardEvent {
-    type: 'FLIP CARD'
+    type: 'FLIP'
 };
 
 export type GameEvent = 

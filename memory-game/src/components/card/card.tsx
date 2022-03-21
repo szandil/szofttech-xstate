@@ -1,6 +1,4 @@
 import { useActor } from '@xstate/react';
-import { isElementOfType } from 'react-dom/test-utils';
-import { ActorRef } from 'xstate';
 import { CardActorRefType } from '../../game/cardTypes';
 import styles from './card.module.css';
 
@@ -23,8 +21,12 @@ export const Card = ({cardActor, ...props}: CardProps) => {
         }
     }
 
+    const handleCardClick = (event: any) => {
+        send('TRY_FLIPPING');
+    }
+
     return (
-        <span className={styles.card}>
+        <span className={styles.card} onClick={handleCardClick}>
             <span>{id}</span>
             <span>{visibleSide}</span>
         </span>
