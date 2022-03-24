@@ -1,13 +1,15 @@
 import { createMachine } from "xstate";
 import { sendParent } from "xstate/lib/actions";
 import { CardContext, CardEvent, CardTypestate } from "./cardTypes";
+import { flipCardEvent } from "./gameTypes";
 
 
 
-export const createCardMachine = ({id}: {id: string}) => createMachine<CardContext, CardEvent, CardTypestate>({
+export const createCardMachine = ({id, frontImage}: {id: string, frontImage: string}) => createMachine<CardContext, CardEvent, CardTypestate>({
     id: 'card',
     context: {
         id,
+        frontImage
     },
     initial: 'in game',
     states: {
@@ -24,7 +26,7 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
                             // ]
                         },
                         TRY_FLIPPING: {
-                            actions: sendParent('FLIP')
+                            actions: 'sendFlip'
                         }
                     }
                 },
@@ -46,6 +48,13 @@ export const createCardMachine = ({id}: {id: string}) => createMachine<CardConte
 }, 
 {
     actions: {
+        sendFlip: sendParent(context => {
+            const event: flipCardEvent = {
+                type: 'FLIP',
+                cardId: context.id
+            }
+            return event;
+        })
     },
     guards: {},
     delays: {},

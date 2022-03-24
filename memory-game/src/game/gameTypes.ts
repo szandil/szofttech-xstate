@@ -1,4 +1,4 @@
-import { State } from "xstate";
+import { DoneEventObject, State } from "xstate";
 import { PlayerActorType } from "../player/playerTypes";
 import { CardActorRefType, CardContext, CardEvent, CardTypestate } from "./cardTypes";
 
@@ -8,7 +8,8 @@ export interface GameContext {
     numberOfCards: number;
     cards: CardActorRefType[];
     players: PlayerActorType[];
-    firstFlippedCard?: CardActorRefType;
+    flippedCards: CardActorRefType[];
+    imageSet: string;
 }
 
 export interface startGameEvent {
@@ -16,17 +17,23 @@ export interface startGameEvent {
 };
 
 export interface flipCardEvent {
-    type: 'FLIP'
+    type: 'FLIP',
+    cardId: string 
 };
 
 export type GameEvent = 
     | startGameEvent
-    | flipCardEvent;
+    | flipCardEvent
+    | DoneEventObject;    // workaround for Type 'EventObject' is not assignable to type 'GameEvent' error  (https://github.com/statelyai/xstate/issues/1276)
 
 export type GameTypestate = {
     context: GameContext;
     value: 'waiting for game' |
-            'game in progress' | {'game in progress': 'one card flipped'} | {'game in progress': 'two cards flipped'} | {'game in progress': 'no cards fipped'} |
+            'game in progress' | 
+            {'game in progress': 'one card flipped'} | 
+            {'game in progress': 'two cards flipped'} | 
+            {'game in progress': 'no cards fipped'} |
+            {'game in progress': 'evaluate game ove'} |
             'game over'
 };
 

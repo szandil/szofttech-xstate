@@ -6,7 +6,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 2px black  solid;
+    border: 2px #373D3F  solid;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.back {
+    background-color: rgba(44, 55, 87, 0.849);
+    color: rgb(236, 236, 236);
+}
+
+.front {
+
 }

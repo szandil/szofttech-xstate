@@ -7,7 +7,7 @@ export interface CardContext {
 }
 
 export interface FlipEvent  {
-    type: 'FLIP'
+    type: 'FLIP',
 }
 
 export interface TryFlippingEvent {

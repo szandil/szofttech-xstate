@@ -1,10 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import './App.css';
-import { useActor, useInterpret, useMachine, useSelector } from "@xstate/react";
-import { gameMachine } from './game/gameMachine';
+import { useSelector } from "@xstate/react";
 import { Card } from './components/card/card';
 import { GlobalGameContext } from './gameContext';
-import { ActorRefFrom, InterpreterFrom } from 'xstate';
 import { CardActorRefType } from './game/cardTypes';
 
 /* 
@@ -29,6 +27,7 @@ const selectCards = (state: any): CardActorRefType[] => state.context.cards;
 
 const waitingForGameSelector = (state: any) => state.matches("waiting for game");
 const gameInProgressSelector = (state: any) => state.matches("game in progress");
+const gameOverSelector = (state: any) => state.matches("game over");
 
 const App = () => {
 
@@ -40,6 +39,7 @@ const App = () => {
 
   const isWaitingForGame = useSelector(gameService, waitingForGameSelector);
   const isGameInProgress = useSelector(gameService, gameInProgressSelector);
+  const isGameOver = useSelector(gameService, gameOverSelector);
 
   const waiting = 
     <>
@@ -60,12 +60,18 @@ const App = () => {
         {cards.map(card => <Card key={card.id} cardActor={card} />)}
       </div>
     </>
+
+  const gameOver = 
+    <>
+      <h1>Game Over</h1>
+    </>
     
 
   return (
     <div className="container-fluid pt-4 main"> 
       {isWaitingForGame && waiting }
       {isGameInProgress && inProgress}
+      {isGameOver && gameOver}
     </div>
   );
 }

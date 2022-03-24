@@ -10,7 +10,7 @@ interface CardProps {
 export const Card = ({cardActor, ...props}: CardProps) => {
 
     const [state, send] = useActor(cardActor);
-    const { id } = state.context;
+    const { id, frontImage } = state.context;
     
     let visibleSide = '';
     if (typeof state.value === 'object') {
@@ -20,15 +20,26 @@ export const Card = ({cardActor, ...props}: CardProps) => {
             visibleSide = 'front';
         }
     }
+    const isFrontVisible = visibleSide === 'front';
 
+    console.log(frontImage);
+    
     const handleCardClick = (event: any) => {
         send('TRY_FLIPPING');
     }
 
+    const image = {
+        backgroundImage: `url(${frontImage})`, 
+        backgroundSize: '70%', 
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center'
+    };
+
     return (
-        <span className={styles.card} onClick={handleCardClick}>
-            <span>{id}</span>
-            <span>{visibleSide}</span>
+        <span className={`${styles.card} ${isFrontVisible ? styles.front : styles.back}`} 
+            onClick={handleCardClick}
+            style={isFrontVisible ? image : {}}>
+            <span>{id.split("-")[0]}</span>
         </span>
     );
 };

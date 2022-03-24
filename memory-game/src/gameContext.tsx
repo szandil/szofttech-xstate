@@ -6,7 +6,9 @@ import { gameMachine } from './game/gameMachine';
 export const GlobalGameContext = createContext({ gameService: {} as InterpreterFrom<typeof gameMachine>});
 
 export const GameContextProvider = (props: any) => {
-    const gameService = useInterpret(gameMachine);
+    const imageSets = ['animals', 'food', 'space', 'toys'];
+    const imageSet = imageSets[Math.floor(Math.random() * imageSets.length)];
+    const gameService = useInterpret(gameMachine, {context: {imageSet: imageSet}});
 
     return (
         <GlobalGameContext.Provider value={{gameService}}>
