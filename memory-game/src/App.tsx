@@ -1,10 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import './App.css';
-import { useActor, useInterpret, useMachine, useSelector } from "@xstate/react";
-import { gameMachine } from './game/gameMachine';
+import { useSelector } from "@xstate/react";
 import { Card } from './components/card/card';
 import { GlobalGameContext } from './gameContext';
-import { ActorRefFrom, InterpreterFrom } from 'xstate';
 import { CardActorRefType } from './game/cardTypes';
 
 /* 

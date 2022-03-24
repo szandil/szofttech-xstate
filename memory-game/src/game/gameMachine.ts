@@ -82,9 +82,9 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
       respondFlip: respond('FLIP')
     },
     guards: {
-      allCardsCollected: (context, event) => {
-        return context.cards.length === 0;
-      }
+      // allCardsCollected: (context, event) => {
+      //   return context.cards.length === 0;
+      // }
     },
     delays: {
       DEFAULT_DELAY: 2000
