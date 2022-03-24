@@ -39,7 +39,7 @@ export const Card = ({cardActor, ...props}: CardProps) => {
         <span className={`${styles.card} ${isFrontVisible ? styles.front : styles.back}`} 
             onClick={handleCardClick}
             style={isFrontVisible ? image : {}}>
-            <span>{id.split("-")[0]}</span>
+            {!isFrontVisible && <span>{id.split("-")[0]}</span>}
         </span>
     );
 };
