@@ -79,7 +79,7 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
             ];
         }
       }),
-      respondFlip: respond('FLIP')
+      respondFlip: respond("FLIP")
     },
     guards: {
       // allCardsCollected: (context, event) => {
