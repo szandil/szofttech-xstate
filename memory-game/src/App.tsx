@@ -31,7 +31,7 @@ const gameOverSelector = (state: any) => state.matches("game over");
 
 const App = () => {
 
-  const ctx = useContext(GlobalGameContext);
+  const ctx = useContext(GlobalGameContext)
   const gameService = ctx.gameService;
   const { send } = gameService; 
 
