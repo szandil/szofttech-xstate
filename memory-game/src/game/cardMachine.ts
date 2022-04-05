@@ -1,7 +1,7 @@
 import { createMachine } from "xstate";
 import { sendParent } from "xstate/lib/actions";
 import { CardContext, CardEvent, CardTypestate } from "./cardTypes";
-import { flipCardEvent } from "./gameTypes";
+import { flipEvent } from "./gameTypes";
 
 
 
@@ -37,6 +37,7 @@ export const createCardMachine = ({id, frontImage}: {id: string, frontImage: str
             },
         }, 
         'collected': {
+            entry: sendParent('CARD_FLIPPED'),
             type: "final"
         }
     }
@@ -44,7 +45,7 @@ export const createCardMachine = ({id, frontImage}: {id: string, frontImage: str
 {
     actions: {
         sendFlip: sendParent(context => {
-            const event: flipCardEvent = {
+            const event: flipEvent = {
                 type: 'FLIP',
                 cardId: context.id
             }

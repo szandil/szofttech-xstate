@@ -2,6 +2,7 @@ import { ActorRef } from "xstate";
 import { CardActorRefType } from "../game/cardTypes";
 
 export interface PlayerContext {
+    id: number;
     collectedPairs: CardActorRefType[];
 }
 
@@ -16,4 +17,4 @@ export type PlayerTypestate = {
 }
 
 
-export type PlayerActorType = ActorRef<any, PlayerTypestate>; 
+export type PlayerActorType = ActorRef<PlayerEvent, PlayerTypestate>; 

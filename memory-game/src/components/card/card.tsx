@@ -1,4 +1,4 @@
-import { useActor } from '@xstate/react';
+import React, { useActor } from '@xstate/react';
 import { CardActorRefType } from '../../game/cardTypes';
 import styles from './card.module.css';
 
@@ -13,17 +13,19 @@ export const Card = ({cardActor, ...props}: CardProps) => {
     const { id, frontImage } = state.context;
     
     let visibleSide = '';
+    let isCollected = false;
     if (typeof state.value === 'object') {
         if (state.value['in game'] === 'face down') {
             visibleSide = 'back';
         } else if (state.value['in game'] === 'face up') {
             visibleSide = 'front';
         }
+    } else if (typeof state.value === 'string') {
+        isCollected = state.value === 'collected';
     }
+
     const isFrontVisible = visibleSide === 'front';
 
-    console.log(frontImage);
-    
     const handleCardClick = (event: any) => {
         send('TRY_FLIPPING');
     }
@@ -35,10 +37,18 @@ export const Card = ({cardActor, ...props}: CardProps) => {
         backgroundPosition: 'center'
     };
 
+    const collected = {
+        visibility: 'hidden'
+    }
+
+    let style = {};
+    if (isFrontVisible) style = image;
+    if (isCollected) style = collected;
+
     return (
         <span className={`${styles.card} ${isFrontVisible ? styles.front : styles.back}`} 
             onClick={handleCardClick}
-            style={isFrontVisible ? image : {}}>
+            style={style}>
             {!isFrontVisible && <span>{id.split("-")[0]}</span>}
         </span>
     );

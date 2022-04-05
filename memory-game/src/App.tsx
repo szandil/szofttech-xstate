@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import './App.css';
-import { useSelector } from "@xstate/react";
+import { useSelector } from '@xstate/react';
 import { Card } from './components/card/card';
 import { GlobalGameContext } from './gameContext';
 import { CardActorRefType } from './game/cardTypes';
@@ -25,15 +25,16 @@ MEMÓRIA JÁTÉK
 
 const selectCards = (state: any): CardActorRefType[] => state.context.cards;
 
-const waitingForGameSelector = (state: any) => state.matches("waiting for game");
-const gameInProgressSelector = (state: any) => state.matches("game in progress");
-const gameOverSelector = (state: any) => state.matches("game over");
+const waitingForGameSelector = (state: any) =>
+  state.matches('waiting for game');
+const gameInProgressSelector = (state: any) =>
+  state.matches('game in progress');
+const gameOverSelector = (state: any) => state.matches('game over');
 
 const App = () => {
-
   const ctx = useContext(GlobalGameContext);
   const gameService = ctx.gameService;
-  const { send } = gameService; 
+  const { send } = gameService;
 
   const cards = useSelector(gameService, selectCards);
 
@@ -41,39 +42,43 @@ const App = () => {
   const isGameInProgress = useSelector(gameService, gameInProgressSelector);
   const isGameOver = useSelector(gameService, gameOverSelector);
 
-  const waiting = 
+  const waiting = (
     <>
       <h1>Játék indítása</h1>
-      <button 
-        type = 'button'
+      <button
+        type='button'
         className='btn btn-primary'
-        onClick={() => send("START GAME")}>
-          START GAME
-          </button>
-    </>;
+        onClick={() => send('START GAME')}
+      >
+        START GAME
+      </button>
+    </>
+  );
 
-
-  const inProgress = 
+  const inProgress = (
     <>
       <h1>Játék folyamatban</h1>
       <div className='cards'>
-        {cards.map(card => <Card key={card.id} cardActor={card} />)}
+        {cards.map((card) => (
+          <Card key={card.id} cardActor={card} />
+        ))}
       </div>
     </>
+  );
 
-  const gameOver = 
+  const gameOver = (
     <>
       <h1>Game Over</h1>
     </>
-    
+  );
 
   return (
-    <div className="container-fluid pt-4 main"> 
-      {isWaitingForGame && waiting }
+    <div className='container-fluid pt-4 main'>
+      {isWaitingForGame && waiting}
       {isGameInProgress && inProgress}
       {isGameOver && gameOver}
     </div>
   );
-}
+};
 
 export default App;

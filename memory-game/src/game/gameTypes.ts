@@ -16,14 +16,19 @@ export interface startGameEvent {
     type: 'START GAME'
 };
 
-export interface flipCardEvent {
+export interface flipEvent {
     type: 'FLIP',
     cardId: string 
 };
 
+export interface cardFlippedEvent {
+    type: 'CARD_FLIPPED'
+}
+
 export type GameEvent = 
     | startGameEvent
-    | flipCardEvent
+    | flipEvent
+    | cardFlippedEvent
     | DoneEventObject;    // workaround for Type 'EventObject' is not assignable to type 'GameEvent' error  (https://github.com/statelyai/xstate/issues/1276)
 
 export type GameTypestate = {
@@ -33,7 +38,8 @@ export type GameTypestate = {
             {'game in progress': 'one card flipped'} | 
             {'game in progress': 'two cards flipped'} | 
             {'game in progress': 'no cards fipped'} |
-            {'game in progress': 'evaluate game ove'} |
+            {'game in progress': 'evaluate game over'} |
+            {'game in progress': 'wait'} |
             'game over'
 };
 
