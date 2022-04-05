@@ -20,10 +20,6 @@ export const createCardMachine = ({id, frontImage}: {id: string, frontImage: str
                     on: {
                         FLIP: {
                             target: 'face up',
-                            // actions: [
-                            //     'turnAction', 
-                            //     sendParent('FLIP')
-                            // ]
                         },
                         TRY_FLIPPING: {
                             actions: 'sendFlip'
@@ -34,7 +30,6 @@ export const createCardMachine = ({id, frontImage}: {id: string, frontImage: str
                     on: {
                         FLIP: {
                             target: 'face down',
-                            // actions: 'turnAction'
                         },
                         COLLECT: '#card.collected'
                     }
