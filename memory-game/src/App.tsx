@@ -4,26 +4,11 @@ import { useSelector } from '@xstate/react';
 import { Card } from './components/card/card';
 import { GlobalGameContext } from './gameContext';
 import { CardActorRefType } from './game/cardTypes';
-
-/* 
-
-MEMÓRIA JÁTÉK
-- játék state machine-je
-- adatok tárolása külön, a játék levezetésére metódusok
-- vizualizáció
-
-ÖTLETEK
-- lehet, hogy a játékosok állapotait is külön kéne kezelni? (Player állapotgép) 
-  --> játékosok számának választásakor a Memory Game állapotgépben létrejön (spawn)
-  --> listában kell tárolni a játékosokat a contextben (és hogy hanyadik játokos jön) 
-    --> ha a spawn-nál meg van adva név, akkor a send-ben ez megadható pl. send({ type: 'SUBMIT' }, { to: 'form' })
-- kártyák megoldása? --> a játékosokhoz hasonlóan?
-- kezelni kell azt is, hogy hány db van felfordítva, melyik játékosnál, melyik kártyák vannak --> ezt tudja egy állapotgép?
-
-- context megadása teljesen kívülről? talán createModel vagy withContext vagy react context 
-*/
+import { PlayerActorType } from './player/playerTypes';
+import { Player } from './components/player/player';
 
 const selectCards = (state: any): CardActorRefType[] => state.context.cards;
+const selectPlayers = (state: any): PlayerActorType[] => state.context.players;
 
 const waitingForGameSelector = (state: any) =>
     state.matches('waiting for game');
@@ -37,10 +22,13 @@ const App = () => {
     const { send } = gameService;
 
     const cards = useSelector(gameService, selectCards);
+    const players = useSelector(gameService, selectPlayers);
 
     const isWaitingForGame = useSelector(gameService, waitingForGameSelector);
     const isGameInProgress = useSelector(gameService, gameInProgressSelector);
     const isGameOver = useSelector(gameService, gameOverSelector);
+
+    console.log(gameService.children);
 
     const waiting = (
         <>
@@ -72,12 +60,19 @@ const App = () => {
         </>
     );
 
+ 
+
     return (
-        <div className='container-fluid pt-4 main'>
-            {isWaitingForGame && waiting}
-            {isGameInProgress && inProgress}
-            {isGameOver && gameOver}
-        </div>
+        <>
+            <div className='container-fluid pt-4 main'>
+                {isWaitingForGame && waiting}
+                {isGameInProgress && inProgress}
+                {isGameOver && gameOver}
+            </div>
+            <div className='m-5 players-div'>
+                {players.map(player => <Player key={player.id} playerActor={player} />)}
+            </div>
+        </>
     );
 };
 

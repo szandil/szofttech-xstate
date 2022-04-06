@@ -13,3 +13,8 @@
     margin-top: 2rem;
     width: 70vw;
 }
+
+.players-div {
+    display: flex;
+    justify-content: space-between;
+}

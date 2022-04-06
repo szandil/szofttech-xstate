@@ -30,7 +30,7 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
         },
       },
       'game in progress': {
-        entry: 'initGame',
+        entry: ['initGame', 'setFirstPlayer'],
         initial: 'no cards flipped',
         states: {
           'no cards flipped': {
@@ -84,7 +84,7 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
           },
           'wait': {
             on: {
-              CARD_FLIPPED: {
+              CARD_COLLECTED: {
                 target: 'evaluate game over',
               },
             },
@@ -93,10 +93,11 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
             exit: assign({ flippedCards: (context, _) => [] }),
             always: [
               { target: '#Memory game.game over', cond: 'allCardsCollected' },
+              // { target: 'waiting for player swap', actions: 'swapPlayers' },
               { target: 'no cards flipped' },   // TODO target: player swap, action: -||- 
             ],
           },
-          'waitin for player swap': {
+          'waiting for player swap': {
             // TODO swap players --> a player akkor jelez, ha arra vált, hogy ő jön
             // TODO target: no cards flipped
           }
@@ -137,6 +138,7 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
           return [..._players.map((player) => spawn(player) as PlayerActorType)];
         }
       }),
+      setFirstPlayer: send('TAKE_TURN', {to: (context) => context.players[0]}),
       respondFlip: respond('FLIP'),
       addCardToFlipped: assign({
         flippedCards: (context, event) => {

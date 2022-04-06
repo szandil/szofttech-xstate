@@ -43,7 +43,7 @@ export const createCardMachine = ({
                     },
                 },
                 collected: {
-                    entry: sendParent('CARD_FLIPPED'),
+                    entry: sendParent('CARD_COLLECTED'),
                     type: 'final',
                 },
             },

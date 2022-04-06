@@ -1,5 +1,5 @@
-import { ActorRef } from "xstate";
-import { CardActorRefType } from "../game/cardTypes";
+import { ActorRef } from 'xstate';
+import { CardActorRefType } from '../game/cardTypes';
 
 export interface PlayerContext {
     id: number;
@@ -7,14 +7,12 @@ export interface PlayerContext {
 }
 
 export type PlayerEvent = 
-    | {type: 'TURN'}
-    | {type: 'COLLECT'};
+    { type: 'TAKE_TURN' } | 
+    { type: 'FINISH_TURN' };
 
 export type PlayerTypestate = {
-    context: PlayerContext,
-    value: 'in game' | {'in game': 'face down'} | {'in game': 'face up'} |
-            'collected'
-}
+    context: PlayerContext;
+    value: 'waiting' | 'thinking';
+};
 
-
-export type PlayerActorType = ActorRef<PlayerEvent, PlayerTypestate>; 
+export type PlayerActorType = ActorRef<PlayerEvent, PlayerTypestate>;
