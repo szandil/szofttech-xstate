@@ -26,59 +26,59 @@ MEMÓRIA JÁTÉK
 const selectCards = (state: any): CardActorRefType[] => state.context.cards;
 
 const waitingForGameSelector = (state: any) =>
-  state.matches('waiting for game');
+    state.matches('waiting for game');
 const gameInProgressSelector = (state: any) =>
-  state.matches('game in progress');
+    state.matches('game in progress');
 const gameOverSelector = (state: any) => state.matches('game over');
 
 const App = () => {
-  const ctx = useContext(GlobalGameContext);
-  const gameService = ctx.gameService;
-  const { send } = gameService;
+    const ctx = useContext(GlobalGameContext);
+    const gameService = ctx.gameService;
+    const { send } = gameService;
 
-  const cards = useSelector(gameService, selectCards);
+    const cards = useSelector(gameService, selectCards);
 
-  const isWaitingForGame = useSelector(gameService, waitingForGameSelector);
-  const isGameInProgress = useSelector(gameService, gameInProgressSelector);
-  const isGameOver = useSelector(gameService, gameOverSelector);
+    const isWaitingForGame = useSelector(gameService, waitingForGameSelector);
+    const isGameInProgress = useSelector(gameService, gameInProgressSelector);
+    const isGameOver = useSelector(gameService, gameOverSelector);
 
-  const waiting = (
-    <>
-      <h1>Játék indítása</h1>
-      <button
-        type='button'
-        className='btn btn-primary'
-        onClick={() => send('START GAME')}
-      >
-        START GAME
-      </button>
-    </>
-  );
+    const waiting = (
+        <>
+            <h1>Játék indítása</h1>
+            <button
+                type='button'
+                className='btn btn-primary'
+                onClick={() => send('START GAME')}
+            >
+                START GAME
+            </button>
+        </>
+    );
 
-  const inProgress = (
-    <>
-      <h1>Játék folyamatban</h1>
-      <div className='cards'>
-        {cards.map((card) => (
-          <Card key={card.id} cardActor={card} />
-        ))}
-      </div>
-    </>
-  );
+    const inProgress = (
+        <>
+            <h1>Játék folyamatban</h1>
+            <div className='cards'>
+                {cards.map((card) => (
+                    <Card key={card.id} cardActor={card} />
+                ))}
+            </div>
+        </>
+    );
 
-  const gameOver = (
-    <>
-      <h1>Game Over</h1>
-    </>
-  );
+    const gameOver = (
+        <>
+            <h1>Game Over</h1>
+        </>
+    );
 
-  return (
-    <div className='container-fluid pt-4 main'>
-      {isWaitingForGame && waiting}
-      {isGameInProgress && inProgress}
-      {isGameOver && gameOver}
-    </div>
-  );
+    return (
+        <div className='container-fluid pt-4 main'>
+            {isWaitingForGame && waiting}
+            {isGameInProgress && inProgress}
+            {isGameOver && gameOver}
+        </div>
+    );
 };
 
 export default App;
