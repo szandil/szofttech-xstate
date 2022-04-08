@@ -47,7 +47,7 @@ export const Card = ({cardActor, inPlayersCollectedArray}: CardProps) => {
         width: '50px',
         height: '50px',
         cursor: 'default',
-        'background-color': 'white'
+        backgroundColor: 'white'
     }
 
     let style = {};

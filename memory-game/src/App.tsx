@@ -6,6 +6,7 @@ import { GlobalGameContext } from './gameContext';
 import { CardActorRefType } from './game/cardTypes';
 import { PlayerActorType } from './player/playerTypes';
 import { Player } from './components/player/player';
+import { GameTypestate } from './game/gameTypes';
 
 const selectCards = (state: any): CardActorRefType[] => state.context.cards;
 const selectPlayers = (state: any): PlayerActorType[] => state.context.players;
@@ -15,6 +16,29 @@ const waitingForGameSelector = (state: any) =>
 const gameInProgressSelector = (state: any) =>
     state.matches('game in progress');
 const gameOverSelector = (state: any) => state.matches('game over');
+const winnerSelector = (state: GameTypestate) => {
+    let winner: number[] = [];
+    const { players } = state.context;
+    let maxPairs = 0;
+    for (const player of players) {
+        
+        const pContext = player.getSnapshot()?.context;
+        const pairNum = pContext ? pContext.collectedPairs.length : 0;
+        
+        if (pairNum === maxPairs ){
+            console.log('add another');
+            winner.push(pContext?.id !== undefined ? pContext.id : -1);
+        }
+        if (pairNum > maxPairs){ 
+            console.log('new max');
+            maxPairs = pairNum;
+            winner = [pContext?.id !== undefined ? pContext.id : -1];
+        }
+    }
+    return winner;
+};
+
+
 
 const App = () => {
     const ctx = useContext(GlobalGameContext);
@@ -27,6 +51,7 @@ const App = () => {
     const isWaitingForGame = useSelector(gameService, waitingForGameSelector);
     const isGameInProgress = useSelector(gameService, gameInProgressSelector);
     const isGameOver = useSelector(gameService, gameOverSelector);
+    const winner = useSelector(gameService, winnerSelector);
 
 
     const waiting = (
@@ -55,7 +80,9 @@ const App = () => {
 
     const gameOver = (
         <>
-            <h1>Game Over</h1>
+            <h1>Játék vége</h1>
+            <h2>Nyertes: </h2>
+            {winner.map((w) => <span key="w">játékos {w}, </span>)}
         </>
     );
 

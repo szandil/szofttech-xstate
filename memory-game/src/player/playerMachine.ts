@@ -21,15 +21,13 @@ export const createPlayerMachine = ({ id }: { id: number }) =>
         entry: 'sendStartThinking',
         on: {
           COLLECT_PAIR: {
-            actions: ['collect', log()]
+            actions: 'collect'
           },
           FINISH_TURN: {
             target: 'waiting'
           }
         }
-      },
-      'one card chosen': {},
-      'two cards chosen': {},
+      }
     },
   }, {
     actions: {

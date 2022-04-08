@@ -19,10 +19,6 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
       flippedCards: [],
       imageSet: 'animals',
     },
-    // invoke: {
-    //   id: 'playerActor',
-    //   src: playerMachine,
-    // },
     initial: 'waiting for game',
     states: {
       'waiting for game': {
@@ -101,12 +97,12 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
             },
           },
           'evaluate game over': {
-            exit: assign({ flippedCards: (context, _) => [] }),
             always: [
               { target: '#Memory game.game over', cond: 'allCardsCollected' },
               { target: 'no cards flipped', cond: 'foundPair' },
               { target: 'waiting for player swap', actions: ['sendCurrentFinish', 'sendNextStart'] },
             ],
+            exit: assign({ flippedCards: (context, _) => [] }),
           },
           'waiting for player swap': { 
             on: {
