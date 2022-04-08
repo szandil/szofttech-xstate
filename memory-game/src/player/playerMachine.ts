@@ -1,5 +1,5 @@
-import { createMachine } from 'xstate';
-import { sendParent } from 'xstate/lib/actions';
+import { assign, createMachine } from 'xstate';
+import { log, sendParent } from 'xstate/lib/actions';
 import { PlayerContext, PlayerEvent, PlayerTypestate } from './playerTypes';
 
 export const createPlayerMachine = ({ id }: { id: number }) =>
@@ -20,7 +20,11 @@ export const createPlayerMachine = ({ id }: { id: number }) =>
       'thinking': {
         entry: 'sendStartThinking',
         on: {
+          COLLECT_PAIR: {
+            actions: ['collect', log()]
+          },
           FINISH_TURN: {
+            target: 'waiting'
           }
         }
       },
@@ -29,6 +33,13 @@ export const createPlayerMachine = ({ id }: { id: number }) =>
     },
   }, {
     actions: {
-      sendStartThinking: sendParent('TURN_START')
+      sendStartThinking: sendParent('PLAYER_TURN_START'),
+      collect: assign({
+        collectedPairs: (context, event) => {
+          const {collectedPairs} = context;
+          if (event.type !== 'COLLECT_PAIR') return collectedPairs;
+          return [...collectedPairs, event.card];
+        }
+      })
     }
   });

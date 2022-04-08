@@ -1,5 +1,6 @@
 import { useActor } from '@xstate/react';
 import { PlayerActorType } from '../../player/playerTypes';
+import { Card } from '../card/card';
 
 interface PlayerProps {
     playerActor: PlayerActorType;
@@ -22,7 +23,7 @@ export const Player = ({ playerActor }: PlayerProps) => {
             <h5>Játékos {id + 1}</h5>
             <p>Állapot: {playerState}</p>
             <p>Összegyűjtött lapok: </p>
-            {collectedPairs.map(pair => <p>{pair.getSnapshot()?.context.id}</p>)}
+            {collectedPairs.map(pair => <p key={pair.getSnapshot()?.context.id}>{pair.getSnapshot()?.context.id.split('-')[0]}</p>)}
         </div>
     );
 };

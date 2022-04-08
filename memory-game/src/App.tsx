@@ -28,7 +28,6 @@ const App = () => {
     const isGameInProgress = useSelector(gameService, gameInProgressSelector);
     const isGameOver = useSelector(gameService, gameOverSelector);
 
-    console.log(gameService.children);
 
     const waiting = (
         <>

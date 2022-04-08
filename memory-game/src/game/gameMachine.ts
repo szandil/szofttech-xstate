@@ -1,8 +1,8 @@
 import { assign, createMachine, send, spawn } from 'xstate';
-import { respond } from 'xstate/lib/actions';
+import {  respond } from 'xstate/lib/actions';
 import { shuffleArray } from '../common/common_config';
 import { createPlayerMachine } from '../player/playerMachine';
-import { PlayerActorType } from '../player/playerTypes';
+import { CollectPairEvent, PlayerActorType } from '../player/playerTypes';
 import { createCardMachine } from './cardMachine';
 import { CardActorRefType, CardTypestate } from './cardTypes';
 import { flipEvent, GameContext, GameEvent, GameTypestate } from './gameTypes';
@@ -13,6 +13,7 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
     context: {
       numberOfPlayers: 3,
       numberOfCards: 16,
+      currentPlayerIndex: 0,
       cards: [],
       players: [],
       flippedCards: [],
@@ -63,6 +64,16 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
                       { type: 'COLLECT' },
                       { to: (context) => context.flippedCards[1] }
                     ),
+                    send(context => {
+                        const card = context.flippedCards[0];
+                        const event: CollectPairEvent = {
+                          type: 'COLLECT_PAIR',
+                          card: card
+                        };
+                        return event;
+                      },
+                      { to: (context) => context.players[context.currentPlayerIndex]}
+                    )
                   ],
                   cond: 'foundPair',
                 },
@@ -93,13 +104,17 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
             exit: assign({ flippedCards: (context, _) => [] }),
             always: [
               { target: '#Memory game.game over', cond: 'allCardsCollected' },
-              // { target: 'waiting for player swap', actions: 'swapPlayers' },
-              { target: 'no cards flipped' },   // TODO target: player swap, action: -||- 
+              { target: 'no cards flipped', cond: 'foundPair' },
+              { target: 'waiting for player swap', actions: ['sendCurrentFinish', 'sendNextStart'] },
             ],
           },
-          'waiting for player swap': {
-            // TODO swap players --> a player akkor jelez, ha arra vált, hogy ő jön
-            // TODO target: no cards flipped
+          'waiting for player swap': { 
+            on: {
+              PLAYER_TURN_START: {
+                target: 'no cards flipped',
+                actions: 'nextPlayer'
+              }
+            }
           }
         },
       },
@@ -159,6 +174,16 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
           return [];
         },
       }),
+      sendCurrentFinish: send('FINISH_TURN', {to: (context) => context.players[context.currentPlayerIndex]}),
+      sendNextStart: send('TAKE_TURN', {to: (context) => context.players[(context.currentPlayerIndex + 1) % context.numberOfPlayers]}),
+      nextPlayer: assign({
+        currentPlayerIndex: (context) => (context.currentPlayerIndex + 1) % context.numberOfPlayers
+      })
+      // nextPlayer:  pure((context, event) => {
+      //   type: ActionTypes.Pure,
+      //   get: () => 
+      // }),
+      // send('TAKE_TURN', {to: (context) => context.players[context.currentPlayerIndex + 1]})
     },
     guards: {
       foundPair: (context, _) => {

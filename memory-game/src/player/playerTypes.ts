@@ -6,9 +6,15 @@ export interface PlayerContext {
     collectedPairs: CardActorRefType[];
 }
 
+export interface CollectPairEvent {
+    type: 'COLLECT_PAIR';
+    card: CardActorRefType;
+}
+
 export type PlayerEvent = 
     { type: 'TAKE_TURN' } | 
-    { type: 'FINISH_TURN' };
+    { type: 'FINISH_TURN' } |
+    CollectPairEvent;
 
 export type PlayerTypestate = {
     context: PlayerContext;
