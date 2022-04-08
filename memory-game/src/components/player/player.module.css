@@ -1,0 +1,15 @@
+
+.thinking * {
+    font-size: 1.1rem;
+}
+
+.thinking h5 {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.collected-pairs {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+}

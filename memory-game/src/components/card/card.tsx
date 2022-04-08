@@ -3,11 +3,12 @@ import { CardActorRefType } from '../../game/cardTypes';
 import styles from './card.module.css';
 
 interface CardProps {
-    cardActor: CardActorRefType
+    cardActor: CardActorRefType,
+    inPlayersCollectedArray: boolean
 }
 
 
-export const Card = ({cardActor, ...props}: CardProps) => {
+export const Card = ({cardActor, inPlayersCollectedArray}: CardProps) => {
 
     const [state, send] = useActor(cardActor);
     const { id, frontImage } = state.context;
@@ -41,15 +42,24 @@ export const Card = ({cardActor, ...props}: CardProps) => {
         visibility: 'hidden'
     }
 
+    const inPlayerHand = {
+        ...image,
+        width: '50px',
+        height: '50px',
+        cursor: 'default',
+        'background-color': 'white'
+    }
+
     let style = {};
     if (isFrontVisible) style = image;
     if (isCollected) style = collected;
+    if (inPlayersCollectedArray) style = inPlayerHand;
 
     return (
         <span className={`${styles.card} ${isFrontVisible ? styles.front : styles.back}`} 
             onClick={handleCardClick}
             style={style}>
-            {!isFrontVisible && <span>{id.split("-")[0]}</span>}
+            {!isFrontVisible && !inPlayersCollectedArray && <span>{id.split("-")[0]}</span>}
         </span>
     );
 };

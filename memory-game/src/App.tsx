@@ -47,7 +47,7 @@ const App = () => {
             <h1>Játék folyamatban</h1>
             <div className='cards'>
                 {cards.map((card) => (
-                    <Card key={card.id} cardActor={card} />
+                    <Card key={card.id} cardActor={card} inPlayersCollectedArray={false} />
                 ))}
             </div>
         </>
