@@ -20,9 +20,10 @@ export const Player = ({ playerActor }: PlayerProps) => {
         isThinking = true;
     }
     
+    const thinkingClass = isThinking ? styles.thinking : '';
 
     return (
-        <div className={isThinking ? styles.thinking : ''}>
+        <div className={`${thinkingClass} ${styles['player-div']}`}>
             <h5>Játékos {id + 1}</h5>
             {/* <p>Állapot: {playerState}</p> */}
             {/* <p>Összegyűjtött lapok: </p> */}

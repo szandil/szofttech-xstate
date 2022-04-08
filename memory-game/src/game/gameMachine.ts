@@ -12,7 +12,7 @@ export const gameMachine = createMachine<GameContext, GameEvent, GameTypestate>(
     id: 'Memory game',
     context: {
       numberOfPlayers: 3,
-      numberOfCards: 16,
+      numberOfCards: 20,
       currentPlayerIndex: 0,
       cards: [],
       players: [],

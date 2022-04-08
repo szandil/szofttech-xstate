@@ -8,10 +8,11 @@
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, 100px);
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
     margin-top: 2rem;
     width: 70vw;
+    max-width: 700px;
 }
 
 .players-div {
