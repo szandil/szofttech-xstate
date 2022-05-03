@@ -1,27 +1,8 @@
-class Card {
-    id;
-    frontImage;
+import './card';
+import './player';
 
-    constructor(id) {
-        this.id = id;
-    }
-};
 
-class Player {
-    id;
-    collectedCards;
-
-    constructor(id) {
-        this.id = id;
-        this.collectedCards = [];
-    }
-
-    pairFound(card) {
-        this.collectedCards.push(card);
-        console.log('player ' + this.id, this.collectedCards);
-    }
-};
-
+// TODO: https://statecharts.dev/how-to-use-statecharts.html
 class Game {
 
     numOfPlayers;
@@ -68,6 +49,7 @@ class Game {
 
     selectCard(ind) {
         if (this.cards[ind].collected || (this.selectedCards.length > 0 && this.selectedCards[0].index === ind)) return;
+        
         this.selectedCards.push({index: ind, card: this.cards[ind].card});
         console.log('selected cards', this.selectedCards);
 
@@ -105,7 +87,7 @@ class Game {
         }
         if (allCardsCollected) {
             console.log('game over', this.players);
-            this.newGame(this.numOfPlayers, this.numOfCards);
+            // this.newGame(this.numOfPlayers, this.numOfCards);
 
         }
     }
