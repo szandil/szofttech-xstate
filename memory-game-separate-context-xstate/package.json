@@ -1,6 +1,6 @@
 {
   "type": "module",
   "dependencies": {
-    "xstate": "^4.31.0"
+    "xstate": "^4.32.0"
   }
 }
