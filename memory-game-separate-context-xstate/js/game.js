@@ -1,4 +1,7 @@
 
+import { interpret } from "xstate";
+import { gameMachine } from "../state-machine/game-machine";
+
 // TODO: https://statecharts.dev/how-to-use-statecharts.html
 class Game {
 
@@ -98,6 +101,11 @@ class Game {
 
 window.onload = () => {
 
+    const gameService = interpret(gameMachine);
+    gameService.onTransition(state => {
+        console.log(state);
+    });
+    gameService.start();
     // let game = new Game();
     // game.newGame(2, 16);
     // console.log(game);
