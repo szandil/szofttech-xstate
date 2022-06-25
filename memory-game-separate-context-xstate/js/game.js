@@ -1,10 +1,9 @@
 
-// import { interpret } from "xstate";
 const { interpret, withConfig } = XState;
 import { gameMachine } from "../state-machine/game-machine.js";
 import { Card } from "./card.js";
 import { Player } from "./player.js";
-import * as components from "./components.js";
+import * as components from "./components/components.js";
 
 // TODO: https://statecharts.dev/how-to-use-statecharts.html
 const imageSets = ['animals', 'food', 'space', 'toys'];
@@ -54,9 +53,8 @@ export class Game {
         }
     }
 
-    selectCard(ind) {  
+    selectCard = (ind) => {  
         this.selectedCards.push({index: ind, card: this.cards[ind].card});
-        console.log('selected cards', this.selectedCards);
     }
 
     checkPairFound = () => {
@@ -65,6 +63,10 @@ export class Game {
         const cardId2 = this.selectedCards[1].card.id.split('-')[0];
         
         return cardId1 === cardId2;
+    }
+
+    isCardFlippable = () => {
+
     }
 
     collectPair = () => {
@@ -80,11 +82,7 @@ export class Game {
     }
 
     checkGameOver = () => {
-        let i = 0; 
-        let allCardsCollected = this.cards.reduce((result, card) => result && card.collected, true);
-
-        console.log('checkgameover: ', allCardsCollected);
-        return allCardsCollected;
+        return this.cards.reduce((result, card) => result && card.collected, true);
     }
 
     nextPlayer = () => {
@@ -96,51 +94,49 @@ export class Game {
 const game = new Game();
 const waitingElement = document.getElementById('waiting');
 const gameInProgressElement = document.getElementById('gameInProgress');
+const gameOverElement = document.getElementById('gameOver');
+const playersElement = document.getElementById('players');
 
 const gameMachineWithConfig = gameMachine.withConfig({
     actions: {
-        initGame: (context, event) => {
-            console.log('init game action');
-            console.log(context, event);
-            game.newGame(2, 3);     // TODO
-            console.log('game after init', game);
+        initGame: () => {
+            game.newGame(3, 10);     // TODO
         },
-        onExitWaitingForGame: (context, event) => {
+        onExitWaitingForGame: () => {
             waitingElement.innerHTML = '';
         },
-        redrawCards: (context, event) => {
+        redrawCards: () => {
             gameInProgressElement.innerHTML = components.gameInProgress(game.cards, game.selectedCards);
+            playersElement.innerHTML = components.players(game.players, game.currentPlayerIndex);
             game.cards.forEach((card, ind) => {
                 document.getElementById(ind).onclick = () => gameService.send({type: 'FLIP', cardIndex: ind});
             })
         },
-        flipSelectedCard: (context, event) => {
-            console.log('flip action', event.cardIndex);
+        flipSelectedCard: (event) => {
             game.selectCard(event.cardIndex);
             components.cardElements[event.cardIndex].isFrontVisible = true;
-            console.log('flip action, game', game);
         },
-        collectPair: (context, event) => {
-            console.log('collect pair action');
+        collectPair: () => {
             game.collectPair();
         },
-        resetFlippedCards: (context, event) => {
-            console.log("reset cards action");
+        resetFlippedCards: () => {
             for (const selectedCard of game.selectedCards) {
                 components.cardElements[selectedCard.index].isFrontVisible = false;
             }
             game.resetFlippedCards();
         },
-        nextPlayer: (context, event) => {
-            console.log('next player action');
+        nextPlayer: () => {
             game.nextPlayer();
         },
-        setUpGameOver: (context, event) => {
+        setUpGameOver: () => {
             console.log('game over');
+            gameInProgressElement.innerHTML = '';
+            gameOverElement.innerHTML = components.gameOver();
         }
     },
     guards: {
-        cardIsFlippable: (context, event) => {
+        cardIsFlippable: (event) => {
+
             const ind = event.cardIndex;
             const result = 
                 !(game.cards[ind].collected ||                                              // already collected card
@@ -149,13 +145,12 @@ const gameMachineWithConfig = gameMachine.withConfig({
             console.log('flippable guard result: ', result);
             return result;
         },
-        pairFound: (context, event) => {
+        pairFound: () => {
             console.log('pair found guard, game: ', game);
             return game.checkPairFound();
         },
-        allCardsCollected: (context, event) => {
-            console.log('\n---  all cards collected guard --- \n\n');
-            game.checkGameOver();
+        allCardsCollected: () => {
+            return game.checkGameOver();
         }
     }
 });
@@ -168,34 +163,17 @@ gameService.onTransition((state, event) => {
 });
 gameService.start();
 
-window.onload = () => {
+gameService.onTransition((state, event) => {
+    console.log('on transition - event', event);
+    console.log('on transition - state', state.value);
+});
+gameService.start();
+
+console.log(gameMachineWithConfig.initialState.value);
+console.log(gameService.initialState.value);
 
 
-    gameService.onTransition((state, event) => {
-        console.log('on transition - event', event);
-        console.log('on transition - state', state.value);
-    });
-    gameService.start();
+waitingElement.innerHTML = components.waiting(gameService);
+document.getElementById('startBtn').onclick = () => gameService.send('START_NEW_GAME');
+gameInProgressElement.innerHTML = '';// components.gameInProgress(game.cards);
 
-    console.log(gameMachineWithConfig.initialState.value);
-    console.log(gameService.initialState.value);
-
-
-    // console.log('\n-- start --\n\n');
-    // gameService.send('START_NEW_GAME');
-    // console.log('state after "start new game"', gameService.state.value);
-
-    waitingElement.innerHTML = components.waiting(gameService);
-    document.getElementById('startBtn').onclick = () => gameService.send('START_NEW_GAME');
-    gameInProgressElement.innerHTML = '';// components.gameInProgress(game.cards);
-    
-    // console.log('\n-- 1. flip --');
-    // console.log('state', gameService.state.value);
-    // gameService.send({type: 'FLIP', cardIndex: 0});
-    // console.log('2. flip');
-    // console.log('state', gameService.state.value);
-    // gameService.send({type: 'FLIP', cardIndex: 0});
-    // gameService.send({type: 'FLIP', cardIndex: 1});
-
-    // console.log('game: ', game);
-}

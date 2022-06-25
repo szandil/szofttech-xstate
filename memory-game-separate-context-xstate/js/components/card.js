@@ -1,5 +1,3 @@
-import {gameService} from '../game.js';
-
 export class CardComponent {
 
     card;
@@ -15,6 +13,7 @@ export class CardComponent {
     } 
 
     getCardHtml = () => {
+
         const collected = `
             visibility: hidden
         `;
@@ -45,7 +44,7 @@ export class CardComponent {
         <span class='card ${sideClass}' 
             style='${style}'
             id=${this.index}>
-            ${this.card.card.id.split("-")[0]}
+            ${!this.isFrontVisible ? this.card.card.id.split("-")[0] : ''}
         </span>
         `;
     }

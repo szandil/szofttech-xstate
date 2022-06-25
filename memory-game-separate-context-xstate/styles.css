@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
 }
 
 .cards {
@@ -15,10 +16,13 @@
     max-width: 700px;
 }
 
-.players-div {
+#players {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
+    margin: auto;
+    margin-top: 3rem;
+    max-width: 800px;
 }
 
 .card {
@@ -37,4 +41,23 @@
 .back {
     background-color: rgba(44, 55, 87, 0.849);
     color: rgb(236, 236, 236);
+}
+
+.player-div, .player-div * {
+    text-align: center;
+}
+
+.thinking * {
+    font-size: 1.1rem;
+}
+
+.thinking h5 {
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+.collected-pairs {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
 }

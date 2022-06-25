@@ -55,16 +55,16 @@ createMachine({
     },
     "collecting pair": {
       on: {
-        PAIR_COLLECTED: [{target: "evaluate game over"}]
+        PAIR_COLLECTED: "evaluate game over"
       },
       entry: ['redrawCards']
     },
     "evaluate game over": {
       always: [
         {
-          target: "game over",
           cond: "allCardsCollected",
-          actions: "setUpGameOver"
+          actions: "setUpGameOver",
+          target: "game over",
         },
         {
           target: "no cards flipped",
