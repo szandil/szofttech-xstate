@@ -1,5 +1,10 @@
+<!-- 
+    http-server -c-1
+    port: 8080
+ -->
+
 <!DOCTYPE html>
-<html>
+<html lang="hu">
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -13,7 +18,14 @@
     <script type="module" src='state-machine/game-machine.js'></script>
 </head>
 <body>
-    <h1 class="text-center">AAA</h1>
+    <div class="container-fluid pt-4 main">
+        <div id="waiting" class="main"></div>
+        <div id="gameInProgress" class="main"></div>
+        <div id="gameOver" class="main"></div>
+    </div>
+
+    <div class="m-5" id="players-div"></div>
+
     <script src="https://unpkg.com/xstate@4/dist/xstate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>

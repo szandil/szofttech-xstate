@@ -1,8 +1,9 @@
-class Card {
+export class Card {
     id;
     frontImage;
 
-    constructor(id) {
+    constructor(type, id, imageSet) {
         this.id = id;
+        this.frontImage = `assets/${imageSet}/${type}.png`; // TODO  
     }
 };

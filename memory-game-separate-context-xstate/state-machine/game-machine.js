@@ -15,48 +15,63 @@ createMachine({
           target: "no cards flipped",
         },
       },
+      exit: ['onExitWaitingForGame'] 
     },
     "no cards flipped": {
       on: {
         FLIP: {
           cond: "cardIsFlippable",
           target: "one card flipped",
+          actions: "flipSelectedCard"
         },
       },
+      entry: ['redrawCards']
     },
     "one card flipped": {
       on: {
         FLIP: {
           cond: "cardIsFlippable",
+          actions: "flipSelectedCard",
           target: "two cards flipped",
         },
       },
+      entry: ['redrawCards']
     },
     "two cards flipped": {
-      always: [
-        {
-          actions: "collectPair",
-          cond: "pairFound",
-          target: "collecting pair",
-        },
-        {
-          actions: ["resetFlippedCards", "nextPlayer"],
-          target: "no cards flipped",
-        },
-      ],
+      after: {
+        500: [
+          {
+            cond: "pairFound",
+            actions: "collectPair",
+            target: "collecting pair",
+          },
+          {
+            actions: ["resetFlippedCards", "nextPlayer"],
+            target: "no cards flipped",
+          },
+        ]
+      },
+      entry: ['redrawCards']
     },
     "collecting pair": {
+      on: {
+        PAIR_COLLECTED: [{target: "evaluate game over"}]
+      },
+      entry: ['redrawCards']
+    },
+    "evaluate game over": {
       always: [
         {
-          description: "\n",
-          cond: "allCardsCollected",
           target: "game over",
+          cond: "allCardsCollected",
+          actions: "setUpGameOver"
         },
         {
-          actions: "resetFlippedCards",
           target: "no cards flipped",
+          actions: "resetFlippedCards",
         },
       ],
+      entry: ['redrawCards']  // TODO entry action helyett ontransition-re
     },
     "game over": {
       on: {
