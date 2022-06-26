@@ -4,6 +4,6 @@ export class Card {
 
     constructor(type, id, imageSet) {
         this.id = id;
-        this.frontImage = `assets/${imageSet}/${type}.png`; // TODO  
+        this.frontImage = `assets/${imageSet}/${type}.png`;
     }
 };

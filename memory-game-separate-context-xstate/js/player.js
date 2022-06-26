@@ -9,6 +9,5 @@ export class Player {
 
     pairFound(card) {
         this.collectedCards.push(card);
-        console.log('player ' + this.id, this.collectedCards);
     }
 };
