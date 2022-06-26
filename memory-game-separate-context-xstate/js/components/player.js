@@ -22,8 +22,7 @@ export class PlayerComponent {
     getPlayerHtml = () => {
 
         const thinkingClass = this.isThinking ? 'thinking' : '';
-
-        const cards = this.cardElements.map(cardEl => cardEl?.getCardHtml());
+        const cards = this.cardElements.map(cardEl => cardEl.getCardHtml());
 
         return `
         <div class='${thinkingClass} player-div'>

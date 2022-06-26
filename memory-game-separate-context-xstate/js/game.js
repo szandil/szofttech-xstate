@@ -5,7 +5,7 @@ import { Card } from "./card.js";
 import { Player } from "./player.js";
 import * as components from "./components/components.js";
 
-// TODO: https://statecharts.dev/how-to-use-statecharts.html
+// https://statecharts.dev/how-to-use-statecharts.html
 const imageSets = ['animals', 'food', 'space', 'toys'];
 
 export class Game {
@@ -65,10 +65,6 @@ export class Game {
         return cardId1 === cardId2;
     }
 
-    isCardFlippable = () => {
-
-    }
-
     collectPair = () => {
         this.players[this.currentPlayerIndex].pairFound(this.selectedCards[0].card);
         for (const selectedCard of this.selectedCards) {
@@ -100,19 +96,13 @@ const playersElement = document.getElementById('players');
 const gameMachineWithConfig = gameMachine.withConfig({
     actions: {
         initGame: () => {
-            game.newGame(3, 10);     // TODO
+            game.newGame(3, 10);     
+            redraw();
         },
         onExitWaitingForGame: () => {
             waitingElement.innerHTML = '';
         },
-        redrawCards: () => {
-            gameInProgressElement.innerHTML = components.gameInProgress(game.cards, game.selectedCards);
-            playersElement.innerHTML = components.players(game.players, game.currentPlayerIndex);
-            game.cards.forEach((card, ind) => {
-                document.getElementById(ind).onclick = () => gameService.send({type: 'FLIP', cardIndex: ind});
-            })
-        },
-        flipSelectedCard: (event) => {
+        flipSelectedCard: (_, event) => {
             game.selectCard(event.cardIndex);
             components.cardElements[event.cardIndex].isFrontVisible = true;
         },
@@ -129,24 +119,20 @@ const gameMachineWithConfig = gameMachine.withConfig({
             game.nextPlayer();
         },
         setUpGameOver: () => {
-            console.log('game over');
             gameInProgressElement.innerHTML = '';
             gameOverElement.innerHTML = components.gameOver();
         }
     },
     guards: {
-        cardIsFlippable: (event) => {
-
+        cardIsFlippable: (_, event) => {
             const ind = event.cardIndex;
             const result = 
                 !(game.cards[ind].collected ||                                              // already collected card
                 (game.selectedCards.length > 0 && game.selectedCards[0].index === ind));    // currently visible card
 
-            console.log('flippable guard result: ', result);
             return result;
         },
         pairFound: () => {
-            console.log('pair found guard, game: ', game);
             return game.checkPairFound();
         },
         allCardsCollected: () => {
@@ -155,25 +141,22 @@ const gameMachineWithConfig = gameMachine.withConfig({
     }
 });
 
+const redraw = () => {
+    if (game.cards && game.selectedCards) gameInProgressElement.innerHTML = components.gameInProgress(game.cards, game.selectedCards);
+    if (game.players && game.currentPlayerIndex !== undefined) playersElement.innerHTML = components.players(game.players, game.currentPlayerIndex);
+    if (game.cards) game.cards.forEach((card, ind) => {
+        document.getElementById(ind).onclick = () => gameService.send({type: 'FLIP', cardIndex: ind});
+    })
+};
+redraw();
 
 export const gameService = interpret(gameMachineWithConfig);
 gameService.onTransition((state, event) => {
-    console.log('on transition - event', event);
-    console.log('on transition - state', state.value);
+    redraw();
 });
 gameService.start();
-
-gameService.onTransition((state, event) => {
-    console.log('on transition - event', event);
-    console.log('on transition - state', state.value);
-});
-gameService.start();
-
-console.log(gameMachineWithConfig.initialState.value);
-console.log(gameService.initialState.value);
 
 
 waitingElement.innerHTML = components.waiting(gameService);
 document.getElementById('startBtn').onclick = () => gameService.send('START_NEW_GAME');
-gameInProgressElement.innerHTML = '';// components.gameInProgress(game.cards);
-
+gameInProgressElement.innerHTML = '';

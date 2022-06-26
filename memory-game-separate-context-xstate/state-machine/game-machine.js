@@ -25,7 +25,6 @@ createMachine({
           actions: "flipSelectedCard"
         },
       },
-      entry: ['redrawCards']
     },
     "one card flipped": {
       on: {
@@ -35,7 +34,6 @@ createMachine({
           target: "two cards flipped",
         },
       },
-      entry: ['redrawCards']
     },
     "two cards flipped": {
       after: {
@@ -51,13 +49,11 @@ createMachine({
           },
         ]
       },
-      entry: ['redrawCards']
     },
     "collecting pair": {
       on: {
         PAIR_COLLECTED: "evaluate game over"
       },
-      entry: ['redrawCards']
     },
     "evaluate game over": {
       always: [
@@ -71,7 +67,6 @@ createMachine({
           actions: "resetFlippedCards",
         },
       ],
-      entry: ['redrawCards']  // TODO entry action helyett ontransition-re
     },
     "game over": {
       on: {
